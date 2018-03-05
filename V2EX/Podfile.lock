@@ -1,0 +1,143 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - Aspects (1.4.1)
+  - BlocksKit (2.2.5):
+    - BlocksKit/All (= 2.2.5)
+  - BlocksKit/All (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.5)
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - BlocksKit/MessageUI (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - CocoaLumberjack (3.0.0):
+    - CocoaLumberjack/Default (= 3.0.0)
+    - CocoaLumberjack/Extensions (= 3.0.0)
+  - CocoaLumberjack/Core (3.0.0)
+  - CocoaLumberjack/Default (3.0.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (3.0.0):
+    - CocoaLumberjack/Default
+  - DACircularProgress (2.3.1)
+  - DZNEmptyDataSet (1.8.1)
+  - FLEX (2.4.0)
+  - FXKeychain (1.5.3)
+  - GDPerformanceView (1.3.0)
+  - IDMPhotoBrowser (1.10.1):
+    - DACircularProgress
+    - pop
+    - SDWebImage
+  - IQKeyboardManager (4.0.8)
+  - libextobjc (0.4.1):
+    - libextobjc/EXTADT (= 0.4.1)
+    - libextobjc/EXTConcreteProtocol (= 0.4.1)
+    - libextobjc/EXTKeyPathCoding (= 0.4.1)
+    - libextobjc/EXTNil (= 0.4.1)
+    - libextobjc/EXTSafeCategory (= 0.4.1)
+    - libextobjc/EXTScope (= 0.4.1)
+    - libextobjc/EXTSelectorChecking (= 0.4.1)
+    - libextobjc/EXTSynthesize (= 0.4.1)
+    - libextobjc/NSInvocation+EXT (= 0.4.1)
+    - libextobjc/NSMethodSignature+EXT (= 0.4.1)
+    - libextobjc/RuntimeExtensions (= 0.4.1)
+    - libextobjc/UmbrellaHeader (= 0.4.1)
+  - libextobjc/EXTADT (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTConcreteProtocol (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTKeyPathCoding (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTNil (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSafeCategory (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTScope (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSelectorChecking (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSynthesize (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/NSInvocation+EXT (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/NSMethodSignature+EXT (0.4.1):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/RuntimeExtensions (0.4.1)
+  - libextobjc/UmbrellaHeader (0.4.1)
+  - MBProgressHUD (1.0.0)
+  - pop (1.0.9)
+  - RegexKitLite (4.0)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - SIHTMLParser (1.1)
+  - TTTAttributedLabel (2.0.0)
+  - YYCategories (1.0.4):
+    - YYCategories/no-arc (= 1.0.4)
+  - YYCategories/no-arc (1.0.4)
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - AFNetworking (~> 3.0)
+  - Aspects (~> 1.4.0)
+  - BlocksKit (~> 2.2.0)
+  - CocoaLumberjack (~> 3.0.0)
+  - DZNEmptyDataSet (~> 1.8.0)
+  - FLEX (~> 2.0)
+  - FXKeychain (~> 1.5.0)
+  - GDPerformanceView (~> 1.3.0)
+  - IDMPhotoBrowser (~> 1.10.0)
+  - IQKeyboardManager (~> 4.0.0)
+  - libextobjc (~> 0.4.0)
+  - MBProgressHUD (~> 1.0.0)
+  - RegexKitLite (~> 4.0)
+  - SDWebImage (~> 3.8.0)
+  - SIHTMLParser (~> 1.0)
+  - TTTAttributedLabel (~> 2.0.0)
+  - YYCategories (~> 1.0.0)
+  - YYModel (~> 1.0.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
+  BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
+  FXKeychain: 2fe54573946ffef634f4e2a2851e6c8f4ea15e76
+  GDPerformanceView: 52ab220cd4c9c81de9291e39436e6deef916f9ca
+  IDMPhotoBrowser: 379a8bfcad613356e4b478cb53561bdac6c6f92e
+  IQKeyboardManager: 1a8189fa153bf09044355ee0ad36826f6767e7f7
+  libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  RegexKitLite: c0e4c12e6e7de0769f3a3ed679f0f61604170661
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  SIHTMLParser: ee36c8fe4b54b43c7c18b18e42a0d2c767506a47
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
+  YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: 7da75c21610bc0825f16643784360f375521739f
+
+COCOAPODS: 1.2.0.beta.3
