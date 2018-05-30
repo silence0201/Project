@@ -2,20 +2,13 @@
 //  V2DataManager.m
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2DataManager.h"
 #import <AFNetworking/AFNetworking.h>
-#import <YYCategories/YYCategories.h>
-#import <FXKeychain/FXKeychain.h>
 #import <SIHTMLParser/HTMLParser.h>
-#import <RegexKitLite/RegexKitLite.h>
 #import <CoreText/CoreText.h>
-#import "Macro.h"
-#import "Const.h"
-#import "V2CheckInManager.h"
 
 
 static NSString *const kOnceString =  @"once";
@@ -28,6 +21,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
 
 static NSString *const kLoginPassword = @"p";
 static NSString *const kLoginUsername = @"u";
+
 
 typedef NS_ENUM(NSInteger, V2RequestMethod) {
     V2RequestMethodJSONGET    = 1,
@@ -57,42 +51,14 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
         NSURL  *baseUrl = [NSURL URLWithString:@"https://www.v2ex.com"];
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseUrl];
         AFHTTPRequestSerializer* serializer = [AFHTTPRequestSerializer serializer];
+        serializer.timeoutInterval = 15.0 ;
         self.manager.requestSerializer = serializer;
-        BOOL isLogin = [[[NSUserDefaults standardUserDefaults] objectForKey:kUserIsLogin] boolValue];
-        if (isLogin) {
-            V2User *user = [[V2User alloc] init];
-            user.login = YES;
-            V2Member *member = [[V2Member alloc] init];
-            user.member = member;
-            user.member.memberName = [[NSUserDefaults standardUserDefaults] objectForKey:kUsername];
-            user.member.memberId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserid];
-            user.member.memberAvatarLarge = [[NSUserDefaults standardUserDefaults] objectForKey:kAvatarURL];
-            _user = user;
-        }
-        
     }
     return self;
 }
 
 
-- (void)setUser:(V2User *)user {
-    _user = user;
-    if (user) {
-        self.user.login = YES;
-        [[NSUserDefaults standardUserDefaults] setObject:user.member.memberName forKey:kUsername];
-        [[NSUserDefaults standardUserDefaults] setObject:user.member.memberId forKey:kUserid];
-        [[NSUserDefaults standardUserDefaults] setObject:user.member.memberAvatarLarge forKey:kAvatarURL];
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kUserIsLogin];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUsername];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserid];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAvatarURL];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserIsLogin];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-}
+
 
 + (instancetype)manager {
     static V2DataManager *manager = nil;
@@ -224,8 +190,10 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
         [parameters setValue:@(page) forKey:@"p"] ;
     }
     
-    return [self requestWithMethod:V2RequestMethodJSONGET URLString:@"/api/topics/show.json" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSArray<V2Topic *> *list= [NSArray yy_modelArrayWithClass:[V2Topic class] json:responseObject] ;
+    NSString *url = [NSString stringWithFormat:@"/go/%@?p=%ld",name,page] ;
+    
+    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:url parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSArray<V2Topic *> *list= [V2Topic getTopicListFromResponseObject:responseObject] ;
         success(list);
     } failure:^(NSError *error) {
         failure(error);
@@ -327,8 +295,41 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
     } failure:^(NSError *error) {
         failure(error);
     }];
-    
 }
+
+- (NSURLSessionDataTask *)getMemberTopicListWithType:(V2HotNodesType)type
+                                                page:(NSInteger)page
+                                             Success:(void (^)(NSArray<V2Topic *> *list))success
+                                             failure:(void (^)(NSError *error))failure {
+    NSString *urlString;
+    switch (type) {
+        case V2HotNodesTypeNodes:
+            urlString = @"/my/nodes";
+            break;
+        case V2HotNodesTypeMembers:
+            urlString = @"my/following";
+            break;
+        case V2HotNodesTypeFav:
+            urlString = @"my/topics";
+            break;
+        default:
+            urlString = @"/my/nodes";
+            break;
+    }
+    NSDictionary *parameters = @{@"p": @(page)};
+    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSArray<V2Topic *> *list = [V2Topic getTopicListFromResponseObject:responseObject];
+        if (list) {
+            success(list);
+        } else {
+            NSError *error = [[NSError alloc] initWithDomain:self.manager.baseURL.absoluteString code:V2ErrorTypeGetTopicListFailure userInfo:nil];
+            failure(error);
+        }
+    } failure:^(NSError *error) {
+        failure(error);
+    }];
+}
+
 
 - (NSURLSessionDataTask *)getTopicWithTopicId:(NSString *)topicId
                                       success:(void (^)(V2Topic *model))success
@@ -629,6 +630,24 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
     return nil;
 }
 
+- (NSURLSessionDataTask *)ignoreTopicWithTopicId:(NSString *)topicId success:(void (^)(NSString *))success failure:(void (^)(NSError *))failure{
+    NSString *urlString = [NSString stringWithFormat:@"/t/%@", topicId];
+    
+    [self.manager.requestSerializer setValue:urlString forHTTPHeaderField:@"Referer"];
+    [self requestIgnoreOnceWithURLString:urlString success:^(NSString *onceString) {
+        NSString *ignoreUrlString = [NSString stringWithFormat:@"ignore/topic/%@?once=%@", topicId, onceString];
+        [self requestWithMethod:V2RequestMethodHTTPGET URLString:ignoreUrlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+            success(@"忽略成功");
+        } failure:^(NSError *error) {
+            failure(error);
+        }];
+    } failure:^(NSError *error) {
+        failure(error);
+    }];
+    return nil;
+
+}
+
 #pragma mark - Public Request Methods - Create
 - (NSURLSessionDataTask *)replyCreateWithTopicId:(NSString *)topicId
                                          content:(NSString *)content
@@ -721,16 +740,6 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
     return nil;
 }
 
-- (void)UserLogout {
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *cookie in [storage cookies]) {
-        [storage deleteCookie:cookie];
-    }
-    self.user = nil;
-    [[V2CheckInManager manager] removeStatus];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogoutSuccessNotification object:nil];
-    
-}
 
 - (NSURLSessionDataTask *)getFeedURLSuccess:(void (^)(NSURL *feedURL))success
                                     failure:(void (^)(NSError *error))failure {
@@ -741,7 +750,6 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
         NSString *feedURLString = [htmlString stringByMatching:regex];
         feedURL = [NSURL URLWithString:feedURLString];
         if (feedURL) {
-            self.user.feedURL = feedURL;
             success(feedURL);
         } else {
             NSError *error = [[NSError alloc] initWithDomain:self.manager.baseURL.absoluteString code:V2ErrorTypeGetFeedURLFailure userInfo:nil];
@@ -757,11 +765,8 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
 - (NSURLSessionDataTask *)getUserNotificationWithPage:(NSInteger)page
                                               success:(void (^)(NSArray<V2Notification *> *list))success
                                               failure:(void (^)(NSError *error))failure {
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    if (page) {
-        [parameters setObject:@(page) forKey:@"p"];
-    }
-    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:@"/notifications" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSString *urlStr = [NSString stringWithFormat:@"/notifications?p=%ld",page] ;
+    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:urlStr parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSArray<V2Notification *> *list = [V2Notification getNotificationFromResponseObject:responseObject] ;
         if (list) {
             success(list);
@@ -779,12 +784,8 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
                                            success:(void (^)(NSArray<V2MemberReply *> *list))success
                                            failure:(void (^)(NSError *error))failure {
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    if (page) {
-        [parameters setObject:@(page) forKey:@"p"];
-    }
-    NSString *urlString = [NSString stringWithFormat:@"/member/%@/replies", username];
-    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSString *urlString = [NSString stringWithFormat:@"/member/%@/replies?p=%ld", username,page];
+    return [self requestWithMethod:V2RequestMethodHTTPGET URLString:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSArray<V2MemberReply *> *list = [V2MemberReply getMemberReplyListFromResponseObject:responseObject] ;
         if (list) {
             success(list);
@@ -929,7 +930,6 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
 
 - (NSURLSessionDataTask *)requestIgnoreOnceWithURLString:(NSString *)urlString success:(void (^)(NSString *onceString))success
                                                  failure:(void (^)(NSError *error))failure {
-    
     return [self requestWithMethod:V2RequestMethodHTTPGET URLString:urlString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSString *onceString = [self getIgnoreOnceStringFromHtmlResponseObject:responseObject];
@@ -1113,7 +1113,6 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
                 favUrlString = [aNode getAttributeNamed:@"href"];
                 *stop = YES;
             }
-            
         }];
         
     }
@@ -1173,6 +1172,7 @@ typedef NS_ENUM(NSInteger, V2RequestMethod) {
         [nodes enumerateObjectsUsingBlock:^(HTMLNode *node, NSUInteger idx, BOOL *stop) {
             HTMLNode *numberNode = [node findChildTag:@"span"];
             NSString *nodeName = [node.allContents stringByReplacingOccurrencesOfString:numberNode.allContents withString:@""];
+            nodeName = [nodeName stringByReplacingOccurrencesOfString:@"\n" withString:@""];
             nodeName = [nodeName stringByReplacingOccurrencesOfString:@" " withString:@""];
             NSString *regex1 = @"href=\"/go/(.*?)\"";
             NSString *nodeIdString = [node.rawContents stringByMatching:regex1];

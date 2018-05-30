@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>AFNetworking</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/AFNetworking</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>BlocksKit</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/BlocksKit</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>Bugly</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/Bugly</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>DACircularProgress</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/DACircularProgress</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>DZNEmptyDataSet</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/DZNEmptyDataSet</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>FFToast</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/FFToast</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>GDPerformanceView</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/GDPerformanceView</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>IDMPhotoBrowser</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/IDMPhotoBrowser</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>libextobjc</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/libextobjc</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>pop</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/pop</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>RegexKitLite</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/RegexKitLite</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>SDWebImage</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/SDWebImage</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>SIHTMLParser</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/SIHTMLParser</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>TTTAttributedLabel</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/TTTAttributedLabel</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>UMengUShare</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/UMengUShare</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>YYCategories</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/YYCategories</string>
+</dict>
+<dict>
+	<key>Type</key>
+	<string>PSChildPaneSpecifier</string>
+	<key>Title</key>
+	<string>YYModel</string>
+	<key>File</key>
+	<string>com.mono0926.LicensePlist/YYModel</string>
+</dict>
+	</array>
+</dict>
+</plist>

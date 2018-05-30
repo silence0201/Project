@@ -2,13 +2,13 @@
 //  SIActionSheet.h
 //  V2EX
 //
-//  Created by Silence on 22/01/2017.
+//  Created by 杨晴贺 on 22/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "SIActionSheetButton.h"
 
-@class SIActionSheetButton ;
 @interface SIActionSheet : UIView
 
 @property (nonatomic, copy) UIColor *titleTextColor;

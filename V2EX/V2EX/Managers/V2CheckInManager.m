@@ -2,15 +2,10 @@
 //  V2CheckInManager.m
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2CheckInManager.h"
-#import "Macro.h"
-#import "Const.h"
-#import "V2DataManager.h"
-#import "V2QuickActionManager.h"
 
 #define userDefaults [NSUserDefaults standardUserDefaults]
 
@@ -23,9 +18,7 @@ static NSString *const kCheckInCount    = @"checkInCount";
 
 - (instancetype)init {
     if (self = [super init]) {
-        
         [self updateStatus];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveEnterForegroundNotification) name:UIApplicationWillEnterForegroundNotification object:nil];
         
     }
@@ -33,7 +26,6 @@ static NSString *const kCheckInCount    = @"checkInCount";
 }
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 
 + (instancetype)manager {
@@ -48,31 +40,24 @@ static NSString *const kCheckInCount    = @"checkInCount";
 #pragma mark - Handle Status
 
 - (void)updateStatus {
-    
     _lastCheckInDate = [userDefaults objectForKey:kLastCheckInDate];
     _checkInCount = [[userDefaults objectForKey:kCheckInCount] integerValue];
-    
     [self updateExpired];
-    
     id checkInCountObject = [userDefaults objectForKey:kCheckInCount];
     if (!checkInCountObject) {
         [self updateCheckInCount];
     }
-    
     if (_expired) {
         [self updateIsCheckIn];
     }
-    
 }
 
 - (void)removeStatus {
-    
     [userDefaults removeObjectForKey:kLastCheckInDate];
     [userDefaults removeObjectForKey:kCheckInCount];
     _lastCheckInDate = nil;
     _checkInCount = 0;
     _expired = YES;
-    
 }
 
 - (void)resetStatus {
@@ -81,13 +66,11 @@ static NSString *const kCheckInCount    = @"checkInCount";
 }
 
 #pragma mark - Getter
-
 - (BOOL)isExpired {
     return _expired;
 }
 
 #pragma mark - Setters
-
 - (void)setExpired:(BOOL)expired {
     _expired = expired;
     [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateCheckInBadgeNotification object:nil];
@@ -95,59 +78,44 @@ static NSString *const kCheckInCount    = @"checkInCount";
 
 - (void)setCheckInCount:(NSInteger)checkInCount {
     _checkInCount = checkInCount;
-    
     [userDefaults setObject:@(checkInCount) forKey:kCheckInCount];
-    
     [[V2QuickActionManager manager] updateAction];
-    
 }
 
 - (void)setLastCheckInDate:(NSDate *)lastCheckInDate {
-    
     _lastCheckInDate = lastCheckInDate;
-    
     [self updateExpired];
     [userDefaults setObject:lastCheckInDate forKey:kLastCheckInDate];
-    
 }
 
 #pragma mark - Data Methods
 
 - (void)updateIsCheckIn {
-    
-    WeakSelf
+    @weakify(self);
     [[V2DataManager manager] getCheckInURLSuccess:^(NSURL *URL) {
-        
+        @strongify(self);
         if ([URL.absoluteString rangeOfString:@"mission/daily/redeem"].location != NSNotFound) {
-            weakSelf.expired = YES;
+            self.expired = YES;
         } else {
-            weakSelf.lastCheckInDate = [NSDate date];
-            weakSelf.expired = NO;
-            
-            if (0 == weakSelf.checkInCount) {
-                [weakSelf updateCheckInCount];
+            self.lastCheckInDate = [NSDate date];
+            self.expired = NO;
+            if (0 == self.checkInCount) {
+                [self updateCheckInCount];
             }
         }
-        
-    } failure:^(NSError *error) {
-        ;
-    }];
+    } failure:^(NSError *error) {}];
     
 }
 
 - (void)updateCheckInCount {
-    
-    WeakSelf
+    @weakify(self);
     [[V2DataManager manager] getCheckInCountSuccess:^(NSInteger count) {
-        weakSelf.checkInCount = count;
-    } failure:^(NSError *error) {
-        ;
-    }];
-    
+        @strongify(self);
+        self.checkInCount = count;
+    } failure:^(NSError *error) {}];
 }
 
 - (void)updateExpired {
-    
     if (!self.lastCheckInDate) {
         _expired = YES;
         return;
@@ -167,27 +135,26 @@ static NSString *const kCheckInCount    = @"checkInCount";
         _expired = NO;
         return;
     }
-    
     _expired = YES;
-    
 }
 
 - (NSURLSessionDataTask *)checkInSuccess:(void (^)(NSInteger count))success
                                  failure:(void (^)(NSError *error))failure {
     
-    WeakSelf
+    @weakify(self);
     [[V2DataManager manager] getCheckInURLSuccess:^(NSURL *URL) {
+        @strongify(self);
         if ([URL.absoluteString rangeOfString:@"/balance"].location != NSNotFound) {
             [[V2DataManager manager] getCheckInCountSuccess:^(NSInteger count) {
-                weakSelf.checkInCount = count;
+                self.checkInCount = count;
                 success(count);
             } failure:^(NSError *error) {
                 failure(error);
             }];
         } else {
             [[V2DataManager manager] checkInWithURL:URL Success:^(NSInteger count) {
-                weakSelf.lastCheckInDate = [NSDate date];
-                weakSelf.checkInCount = count;
+                self.lastCheckInDate = [NSDate date];
+                self.checkInCount = count;
                 success(count);
             } failure:^(NSError *error) {
                 failure(error);
@@ -203,11 +170,8 @@ static NSString *const kCheckInCount    = @"checkInCount";
 #pragma mark - Notifications
 
 - (void)didReceiveEnterForegroundNotification {
-    
     [self updateExpired];
-    
     [self updateIsCheckIn];
-    
 }
 
 

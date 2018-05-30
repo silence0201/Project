@@ -2,17 +2,12 @@
 //  V2Topic.m
 //  V2EX
 //
-//  Created by Silence on 22/01/2017.
+//  Created by 杨晴贺 on 22/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2Topic.h"
-#import "V2Member.h"
-#import "V2Node.h"
 #import "V2Helper.h"
 #import "NSString+SIMention.h"
-#import "V2TopicStateManager.h"
-#import "Macro.h"
 #import "SIQuote.h"
 #import <SIHTMLParser/HTMLParser.h>
 #import <RegexKitLite/RegexKitLite.h>
@@ -39,6 +34,8 @@
     self.state = [[V2TopicStateManager manager] getTopicStateWithTopicModel:self];
     self.cellHeight = [V2Topic heightWithTopicModel:self];
     self.topicContent = [self.topicContent stringByReplacingOccurrencesOfString:@"\r" withString:@"\n"];
+    self.topicContent = [self.topicContent stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
+    self.topicContent = [self.topicContent stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
     while ([self.topicContent rangeOfString:@"\n\n"].location != NSNotFound) {
         self.topicContent = [self.topicContent stringByReplacingOccurrencesOfString:@"\n\n" withString:@"\n"];
     }
@@ -192,7 +189,7 @@
         NSArray *cellNodes = [bodyNode findChildrenTag:@"div"];
         
         for (HTMLNode *cellNode in cellNodes) {
-            if ([[cellNode getAttributeNamed:@"class"] isEqualToString:@"cell item"]) {
+            if ([[cellNode getAttributeNamed:@"class"] isEqualToString:@"cell item"] || [[cellNode getAttributeNamed:@"class"] hasPrefix:@"cell"]) {
                 V2Topic *model = [[V2Topic alloc] init];
                 model.topicCreator = [[V2Member alloc] init];
                 model.topicNode = [[V2Node alloc] init];
@@ -285,7 +282,9 @@
                 }
                 model.state = [[V2TopicStateManager manager] getTopicStateWithTopicModel:model];
                 model.cellHeight = [self heightWithTopicModel:model];
-                [topicArray addObject:model];
+                if(model.topicTitle.length > 0){
+                    [topicArray addObject:model];
+                }
             }
         }
         

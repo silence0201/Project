@@ -2,13 +2,12 @@
 //  V2MemberReply.h
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2BaseEntity.h"
+#import "V2Topic.h"
 
-@class V2Topic ;
 @interface V2MemberReply : V2BaseEntity
 
 @property (nonatomic, copy  ) NSString           *memberReplyContent;

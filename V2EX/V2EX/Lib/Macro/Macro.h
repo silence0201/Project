@@ -2,7 +2,7 @@
 //  Color.h
 //  V2EX
 //
-//  Created by Silence on 22/01/2017.
+//  Created by 杨晴贺 on 22/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
@@ -10,6 +10,7 @@
 #define Macro_h
 
 #import "V2SettingManager.h"
+#import "AppDelegate.h"
 
 #define RGB(c,a)    [UIColor colorWithRed:((c>>16)&0xFF)/256.0  green:((c>>8)&0xFF)/256.0   blue:((c)&0xFF)/256.0   alpha:a]
 
@@ -41,7 +42,7 @@
 
 #define kDeviceOSVersion ([[[UIDevice currentDevice] systemVersion] floatValue])
 
-#define AppDelegate ((V2AppDelegate *)[UIApplication sharedApplication].delegate)
+#define AppDelegateInstance (AppDelegate *)([UIApplication sharedApplication].delegate)
 #define WeakSelf __weak typeof(self) weakSelf = self;
 
 #endif /* Color_h */

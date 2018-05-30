@@ -2,31 +2,24 @@
 //  V2QuickActionManager.m
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2QuickActionManager.h"
-#import "V2NotificationManager.h"
-#import "V2CheckInManager.h"
-#import "Macro.h"
 
-NSString * V2CheckInQuickAction = @"com.singro.v2ex.checkin";
-NSString * V2NotificationQuickAction = @"com.singro.v2ex.notification";
+NSString * V2CheckInQuickAction = @"com.silence.v2ex.checkin";
+NSString * V2NotificationQuickAction = @"com.silence.v2ex.notification";
 
 @implementation V2QuickActionManager
 
 - (instancetype)init {
     if (self = [super init]) {
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveEnterBackgroundNotification) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        
     }
     return self;
 }
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 
 + (instancetype)manager {
@@ -38,31 +31,16 @@ NSString * V2NotificationQuickAction = @"com.singro.v2ex.notification";
     return manager;
 }
 
-- (void)updateAction
-{
-#ifdef EnableNotification
-    NSArray <UIApplicationShortcutItem *> *existingShortcutItems = [[UIApplication sharedApplication] shortcutItems];
-    if (existingShortcutItems.count != 2) {
-        UIApplicationShortcutItem *checkInItem = [self createCheckInItem];
-        UIApplicationShortcutItem *notificationItem = [self createNotificationItem];
-        [[UIApplication sharedApplication] setShortcutItems: @[notificationItem, checkInItem]];
-    }
-    
-    [self updateCheckInItem];
-    [self updateNotificationItem];
-#else
+- (void)updateAction{
     NSArray <UIApplicationShortcutItem *> *existingShortcutItems = [[UIApplication sharedApplication] shortcutItems];
     if (existingShortcutItems.count != 1) {
         UIApplicationShortcutItem *checkInItem = [self createCheckInItem];
         [[UIApplication sharedApplication] setShortcutItems: @[checkInItem]];
     }
-    
     [self updateCheckInItem];
-#endif
 }
 
-- (void)updateCheckInItem
-{
+- (void)updateCheckInItem{
     NSArray <UIApplicationShortcutItem *> *existingShortcutItems = [[UIApplication sharedApplication] shortcutItems];
     UIApplicationShortcutItem *anExistingShortcutItem;
     for (UIApplicationShortcutItem *item in existingShortcutItems) {
@@ -82,12 +60,10 @@ NSString * V2NotificationQuickAction = @"com.singro.v2ex.notification";
         }
         [updatedShortcutItems replaceObjectAtIndex: anIndex withObject: aMutableShortcutItem];
         [[UIApplication sharedApplication] setShortcutItems: updatedShortcutItems];
-    } else {
     }
 }
 
-- (UIApplicationShortcutItem *)createCheckInItem
-{
+- (UIApplicationShortcutItem *)createCheckInItem{
     UIApplicationShortcutIcon *checkInIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"quick_checkin"];
     UIMutableApplicationShortcutItem *checkInItem = [[UIMutableApplicationShortcutItem alloc] initWithType:V2CheckInQuickAction localizedTitle:@"签到" localizedSubtitle:nil icon:checkInIcon userInfo:nil];
     if ([V2CheckInManager manager].checkInCount > 0) {
@@ -96,49 +72,11 @@ NSString * V2NotificationQuickAction = @"com.singro.v2ex.notification";
     return checkInItem;
 }
 
-- (void)updateNotificationItem
-{
-    NSArray <UIApplicationShortcutItem *> *existingShortcutItems = [[UIApplication sharedApplication] shortcutItems];
-    UIApplicationShortcutItem *anExistingShortcutItem;
-    for (UIApplicationShortcutItem *item in existingShortcutItems) {
-        if ([item.type isEqualToString:V2NotificationQuickAction]) {
-            anExistingShortcutItem = item;
-        }
-    }
-    if (anExistingShortcutItem) {
-        NSUInteger anIndex = [existingShortcutItems indexOfObject:anExistingShortcutItem];
-        NSMutableArray <UIApplicationShortcutItem *> *updatedShortcutItems = [existingShortcutItems mutableCopy];
-        UIMutableApplicationShortcutItem *aMutableShortcutItem = [anExistingShortcutItem mutableCopy];
-        aMutableShortcutItem.localizedTitle = [NSString stringWithFormat:@"提醒"];
-        if ([V2NotificationManager manager].unreadCount > 0) {
-            aMutableShortcutItem.localizedSubtitle = [NSString stringWithFormat:@"未读 %zd 条", [V2CheckInManager manager].checkInCount];
-        } else {
-            aMutableShortcutItem.localizedSubtitle = @"无未读";
-        }
-        [updatedShortcutItems replaceObjectAtIndex: anIndex withObject: aMutableShortcutItem];
-        [[UIApplication sharedApplication] setShortcutItems: updatedShortcutItems];
-    } else {
-    }
-}
-
-- (UIApplicationShortcutItem *)createNotificationItem
-{
-    UIApplicationShortcutIcon *notificationIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"section_notification_highlighted"];
-    UIMutableApplicationShortcutItem *notificationItem = [[UIMutableApplicationShortcutItem alloc] initWithType:V2NotificationQuickAction localizedTitle:@"提醒" localizedSubtitle:nil icon:notificationIcon userInfo:nil];
-    if ([V2NotificationManager manager].unreadCount > 0) {
-        notificationItem.localizedSubtitle = [NSString stringWithFormat:@"未读 %zd 条", [V2CheckInManager manager].checkInCount];
-    }
-    return notificationItem;
-    
-}
-
 #pragma mark - Notifications
-
 - (void)didReceiveEnterBackgroundNotification {
     if (kDeviceOSVersion > 9.0) {
         [self updateAction];
     }
-    
 }
 
 

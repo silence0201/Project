@@ -1,0 +1,60 @@
+name: AFNetworking
+body: Copyright (c) 2013-2…
+
+name: BlocksKit
+body: //
+//  LICENSE
+//  B…
+
+name: Bugly
+body: Copyright 2017 tence…
+
+name: DACircularProgress
+body: # License
+
+## MIT Li…
+
+name: DZNEmptyDataSet
+body: The MIT License (MIT…
+
+name: FFToast
+body: MIT License
+
+Copyrig…
+
+name: GDPerformanceView
+body: The MIT License (MIT…
+
+name: IDMPhotoBrowser
+body: The MIT License (MIT…
+
+name: RegexKitLite
+body: <!DOCTYPE HTML PUBLI…
+
+name: SDWebImage
+body: Copyright (c) 2016 O…
+
+name: SIHTMLParser
+body: MIT License
+
+Copyrig…
+
+name: TTTAttributedLabel
+body: Copyright (c) 2011 M…
+
+name: UMengUShare
+body: Copyright 2011 - 201…
+
+name: YYCategories
+body: The MIT License (MIT…
+
+name: YYModel
+body: The MIT License (MIT…
+
+name: libextobjc
+body: **Copyright (c) 2012…
+
+name: pop
+body: BSD License
+
+For Pop…

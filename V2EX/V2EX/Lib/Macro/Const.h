@@ -2,7 +2,7 @@
 //  Const.h
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
@@ -23,5 +23,17 @@ static NSString * const kUpdateCheckInBadgeNotification = @"UpdateCheckInBadgeNo
 static NSString * const kUpdateNotificationBadgeNotification = @"UpdateNotificationBadgeNotification";
 
 static NSString * const kIgnoreTopicSuccessNotification = @"IgnoreTopicSuccessNotification";
+
+static NSString * const kRootViewControllerResetDelegateNotification = @"RootViewControllerResetDelegateNotification";
+static NSString * const kRootViewControllerCancelDelegateNotification = @"RootViewControllerCancelDelegateNotification";
+
+static NSString * const kTopicCreateSuccessNotification = @"TopicCreateSuccessNotification";
+
+static NSString *const kShowReplyTextViewNotification = @"kShowReplyTextViewNotification";
+static NSString *const kHideReplyTextViewNotification = @"kHideReplyTextViewNotification";
+static NSString *const kReplySuccessNotification = @"kReplySuccessNotification";
+static NSString *const kTakeScreenShootNotification = @"kTakeScreenShootNotification";
+
+static NSString * const kSelectMemberNotification = @"SelectMemberNotification";
 
 #endif /* Const_h */

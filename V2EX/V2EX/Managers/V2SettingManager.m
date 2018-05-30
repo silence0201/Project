@@ -2,15 +2,12 @@
 //  V2SettingManager.m
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2SettingManager.h"
+
 #import <AFNetworking/AFNetworking.h>
-#import "Macro.h"
-#import "Const.h"
-#import "V2DataManager.h"
 
 #define userDefaults [NSUserDefaults standardUserDefaults]
 
@@ -35,7 +32,6 @@ static NSString *const kNewNotificationOn     = @"NewNotification";
 static NSString *const kNavigationBarHidden   = @"NavigationBarHidden";
 
 static NSString *const kTrafficeSaveOn = @"TrafficeSaveOn";
-static NSString *const kPreferHttps = @"PreferHttps";
 
 @implementation V2SettingManager{
     BOOL _trafficSaveModeOn;
@@ -43,13 +39,10 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (instancetype)init {
     if (self = [super init]) {
-        
         self.selectedSectionIndex = [[userDefaults objectForKey:kSelectedSectionIndex] unsignedIntegerValue];
         self.categoriesSelectedSectionIndex = [[userDefaults objectForKey:kCategoriesSelectedSectionIndex] unsignedIntegerValue];
         self.favoriteSelectedSectionIndex = [[userDefaults objectForKey:kFavoriteSelectedSectionIndex] unsignedIntegerValue];
-        
         _theme = [[userDefaults objectForKey:kTheme] integerValue];
-        
         id themeAutoChange = [userDefaults objectForKey:kThemeAutoChange];
         if (themeAutoChange) {
             _themeAutoChange = [themeAutoChange boolValue];
@@ -85,10 +78,7 @@ static NSString *const kPreferHttps = @"PreferHttps";
         } else {
             _trafficSaveModeOn = NO;
         }
-        
-        
         [self configureTheme:_theme];
-        
     }
     return self;
 }
@@ -106,6 +96,7 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (void)setSelectedSectionIndex:(NSUInteger)selectedSectionIndex {
     _selectedSectionIndex = selectedSectionIndex;
+    
     
     [userDefaults setObject:@(selectedSectionIndex) forKey:kSelectedSectionIndex];
     [userDefaults synchronize];
@@ -143,9 +134,8 @@ static NSString *const kPreferHttps = @"PreferHttps";
 }
 
 - (void)configureTheme:(V2Theme)theme {
-    
     if (theme == V2ThemeDefault) {
-        
+
         self.navigationBarTintColor = [UIColor blackColor];
         self.navigationBarColor = [UIColor colorWithWhite:1.00 alpha:0.980];
         self.navigationBarLineColor = [UIColor colorWithWhite:0.869 alpha:1];
@@ -200,13 +190,11 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (void)setThemeAutoChange:(BOOL)themeAutoChange {
     _themeAutoChange = themeAutoChange;
-    
     [userDefaults setObject:@(themeAutoChange) forKey:kThemeAutoChange];
     [userDefaults synchronize];
 }
 
 #pragma mark - Alpha
-
 - (CGFloat)imageViewAlphaForCurrentTheme {
     if (kCurrentTheme == V2ThemeNight) {
         return 0.4;
@@ -219,7 +207,6 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (void)setCheckInNotiticationOn:(BOOL)checkInNotiticationOn {
     _checkInNotiticationOn = checkInNotiticationOn;
-    
     [userDefaults setObject:@(checkInNotiticationOn) forKey:kCheckInNotiticationOn];
     [userDefaults synchronize];
     
@@ -227,7 +214,6 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (void)setNewNotificationOn:(BOOL)newNotificationOn {
     _newNotificationOn = newNotificationOn;
-    
     [userDefaults setObject:@(newNotificationOn) forKey:kNewNotificationOn];
     [userDefaults synchronize];
     
@@ -237,31 +223,25 @@ static NSString *const kPreferHttps = @"PreferHttps";
 
 - (void)setNavigationBarAutoHidden:(BOOL)navigationBarAutoHidden {
     _navigationBarAutoHidden = navigationBarAutoHidden;
-    
     [userDefaults setObject:@(navigationBarAutoHidden) forKey:kNavigationBarHidden];
     [userDefaults synchronize];
     
 }
 
 #pragma mark - Traffic
-
 - (void)setTrafficSaveModeOn:(BOOL)trafficSaveModeOn {
     _trafficSaveModeOn = trafficSaveModeOn;
-    
     [userDefaults setObject:@(trafficSaveModeOn) forKey:kTrafficeSaveOn];
     [userDefaults synchronize];
     
 }
 
 - (BOOL)trafficSaveModeOn {
-    
     return ![AFNetworkReachabilityManager sharedManager].isReachableViaWiFi && _trafficSaveModeOn;
 }
 
 - (BOOL)trafficSaveModeOnSetting {
     return _trafficSaveModeOn;
 }
-
-
 
 @end

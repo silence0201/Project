@@ -2,18 +2,11 @@
 //  V2DataManager.h
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2BaseManager.h"
-#import "V2Node.h"
-#import "V2Topic.h"
-#import "V2Member.h"
-#import "V2User.h"
-#import "V2Notification.h"
-#import "V2Reply.h"
-#import "V2MemberReply.h"
+#import "Model.h"
 
 typedef NS_ENUM(NSInteger, V2ErrorType) {
     V2ErrorTypeNoOnceAndNext          = 700,
@@ -42,12 +35,11 @@ typedef NS_ENUM (NSInteger, V2HotNodesType) {
     V2HotNodesTypeR2,
     V2HotNodesTypeNodes,
     V2HotNodesTypeMembers,
-    V2HotNodesTypeFav,
+    V2HotNodesTypeFav
 };
 
 @interface V2DataManager : V2BaseManager
 
-@property (nonatomic, strong) V2User *user;
 
 #pragma mark - GET
 /// 获取所有节点的信息
@@ -77,6 +69,11 @@ typedef NS_ENUM (NSInteger, V2HotNodesType) {
 - (NSURLSessionDataTask *)getTopicListRecentWithPage:(NSInteger)page
                                               Success:(void (^)(NSArray<V2Topic *> *list))success
                                               failure:(void (^)(NSError *error))failure;
+/// 获取收藏的相关信息
+- (NSURLSessionDataTask *)getMemberTopicListWithType:(V2HotNodesType)type
+                                                page:(NSInteger)page
+                                             Success:(void (^)(NSArray<V2Topic *> *list))success
+                                             failure:(void (^)(NSError *error))failure ;
 
 /// 获取某种类型的TopicList,解析html页面
 - (NSURLSessionDataTask *)getTopicListWithType:(V2HotNodesType)type
@@ -193,8 +190,7 @@ typedef NS_ENUM (NSInteger, V2HotNodesType) {
                                         success:(void (^)(NSString *message))success
                                         failure:(void (^)(NSError *error))failure;
 
-/// 用户退出
-- (void)UserLogout;
+
 
 /// 获取用户的Feed地址
 - (NSURLSessionDataTask *)getFeedURLSuccess:(void (^)(NSURL *feedURL))success

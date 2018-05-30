@@ -2,17 +2,13 @@
 //  V2Reply.m
 //  V2EX
 //
-//  Created by Silence on 23/01/2017.
+//  Created by 杨晴贺 on 23/01/2017.
 //  Copyright © 2017 Silence. All rights reserved.
 //
 
-#import "V2Reply.h"
-#import "V2Topic.h"
-#import "V2Member.h"
 #import <UIKit/UIKit.h>
 #import "NSString+SIMention.h"
 #import "SIQuote.h"
-#import "Macro.h"
 
 @implementation V2Reply
 
